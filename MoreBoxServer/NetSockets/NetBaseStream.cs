@@ -3,8 +3,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-using ZylSerialPort;
-
 namespace NetSockets
 {
     /// <summary>
@@ -91,7 +89,7 @@ namespace NetSockets
         /// <param name="endpoint">The remote endpoint.</param>
         public NetBaseStream(NetworkStream stream, EndPoint endpoint)
         {
-            Guid = System.Guid.NewGuid();
+            Guid = Guid.NewGuid();
             IsActive = false;
             EndPoint = endpoint;
             TickRate = 1;
@@ -106,7 +104,7 @@ namespace NetSockets
         {
             IsActive = true;
 
-            thread = new Thread(new ThreadStart(ThreadedReceive));
+            thread = new Thread(ThreadedReceive);
             thread.Start();
             
             if (OnStarted != null) 

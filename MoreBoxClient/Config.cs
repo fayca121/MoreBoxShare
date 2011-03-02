@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Configuration;
 using XSerialPort;
+using System.Configuration;
 
-namespace MoreBoxServer
+namespace MoreBoxClient
 {
-    /// <summary>
-    /// Description of Config.
-    /// </summary>
-    public class Config
+    class Config
     {
-        private readonly int capacity;
         private readonly SerialBaudRate baudRate;
         private readonly SerialDataWidth dataWidth;
         private readonly SerialCommPort port;
         private readonly SerialStopBits stopBits;
         private readonly SerialParityBits parityBits;
-        private readonly string server;
-        private readonly int serverPort;
-        private readonly int freq;
 
         public Config()
         {
@@ -65,7 +58,7 @@ namespace MoreBoxServer
                     dataWidth = SerialDataWidth.dw5Bits;
                     break;
             }
-            
+
             switch (Int32.Parse(ConfigurationManager.AppSettings["StopBits"]))
             {
                 case 1: stopBits = SerialStopBits.sb1Bit;
@@ -93,15 +86,6 @@ namespace MoreBoxServer
             }
 
             port = SerialPort.StringToSerialCommPort(ConfigurationManager.AppSettings["Port"].ToUpper());
-            server = ConfigurationManager.AppSettings["MbServer"];
-            serverPort = Int32.Parse(ConfigurationManager.AppSettings["SPort"]);
-            capacity = Int32.Parse(ConfigurationManager.AppSettings["Users"]);
-            freq = Int32.Parse(ConfigurationManager.AppSettings["Freq"]);
-        }
-
-        public int Capacity
-        {
-            get { return capacity; }
         }
 
         public SerialBaudRate BaudRate
@@ -124,24 +108,6 @@ namespace MoreBoxServer
         public SerialParityBits ParityBits
         {
             get { return parityBits; }
-        }
-
-        public string Server
-        {
-            get { return server; }
-        }
-
-        public int ServerPort
-        {
-            get { return serverPort; }
-        }
-
-        public int Freq
-        {
-            get
-            {
-                return freq;
-            }
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 using ComponentFactory.Krypton.Toolkit;
-using ZylSerialPort;
+using XSerialPort;
 using System.Text;
 using NetSockets;
 
@@ -25,12 +25,13 @@ namespace MoreBoxClient
 
 		void MoreBoxClientFormLoad(object sender, EventArgs e)
 		{
+            Config settings=new Config();
 			//initialisation du serial port
-            serialPort = new SerialPort { BaudRate = SerialPort.SerialBaudRate.br115200, 
-                DataWidth = SerialPort.SerialDataWidth.dw8Bits, 
-                StopBits = SerialPort.SerialStopBits.sb1Bit,
-                ParityBits = SerialPort.SerialParityBits.pbNone, 
-                Port = SerialPort.SerialCommPort.COM10, 
+            serialPort = new SerialPort { BaudRate = settings.BaudRate, 
+                DataWidth = settings.DataWidth, 
+                StopBits = settings.StopBits,
+                ParityBits = settings.ParityBits, 
+                Port = settings.Port, 
                 Delay = 300 };
 			
 			serialPort.Received += serialPort_Received;
@@ -136,7 +137,7 @@ namespace MoreBoxClient
                 cpt = (cpt + 1) % 50;
                 if (cpt == 0)
                     messages = new StringBuilder();
-                string key = SerialPort.ByteArrayToHexaString(e.Data).ToUpper();
+                string key = SerialPortUtils.ByteArrayToHexaString(e.Data).ToUpper();
                 key = key.Substring(5).Trim();
                 if (key.Equals("0000000000000000"))
                     messages.Append(@"\viewkind4\uc1\pard\f0\fs16\fs20\cf1 scrambled channel\par");

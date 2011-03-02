@@ -4,7 +4,7 @@ using System.Threading;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
-using ZylSerialPort;
+using XSerialPort;
 using NetSockets;
 
 namespace MoreBoxServer
@@ -103,7 +103,7 @@ namespace MoreBoxServer
 			consoleTarget.Layout = "${date:format=HH\\:MM\\:ss} ${level}: ${message}";
 			fileTarget.FileName = "event.log";
 			fileTarget.Layout="${shortdate} ${date:format=HH\\:MM\\:ss} ${level}: ${message}";
-			fileTarget.ArchiveAboveSize=3072;
+            fileTarget.ArchiveAboveSize = 15360;
 			fileTarget.KeepFileOpen=true;
 			LoggingRule rule1 = new LoggingRule("*", LogLevel.Debug, consoleTarget);
 			config.LoggingRules.Add(rule1);
@@ -126,7 +126,7 @@ namespace MoreBoxServer
 				Key = new byte[20];
 				serialPort.SendByteArray(e.Data);
 				//wait for key
-				Thread.Sleep(600);
+				Thread.Sleep(settings.Freq);
 				server.DispatchTo(e.Guid,Key);
 			}
 		}
