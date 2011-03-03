@@ -51,7 +51,14 @@ namespace MoreBoxClient
 			{
                 byte[] ECM = new byte[9];
                 Array.Copy(e.Buffer,ECM,9);
-                client.Send(ECM);
+                if (Strings.ToHex(ECM).StartsWith("0706"))
+                    client.Send(ECM);
+                else
+                {
+                    KryptonMessageBox.Show("Le protocole twin n'est pas selectionné", "Error",
+                                       MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    throw new IOException();
+                }
 			}
 			catch(IOException)
 			{
@@ -137,12 +144,12 @@ namespace MoreBoxClient
                 cpt = (cpt + 1) % 50;
                 if (cpt == 0)
                     messages = new StringBuilder();
-                string key = Strings.ToHex(e.Data);
-                key = key.Substring(5).Trim();
-                if (key.Equals("0000000000000000"))
+                string cw = Strings.ToHex(e.Data);
+                cw = cw.Substring(6,32).Trim();
+                if (cw.StartsWith("0000000000000000"))
                     messages.Append(@"\viewkind4\uc1\pard\f0\fs16\fs20\cf1 scrambled channel\par");
                 else
-                    messages.Append(string.Format(@"\viewkind4\uc1\pard\f0\fs16\fs20\cf3 {0}\par", key));
+                    messages.Append(string.Format(@"\viewkind4\uc1\pard\f0\fs16\fs20\cf3 {0}\par", cw));
                 DisplayMessage(messages.ToString());
             }
 		}
