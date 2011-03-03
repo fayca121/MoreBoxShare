@@ -104,7 +104,7 @@ namespace XSerialPort
 			m_ReadIntervalTimeout = -1;
 			m_WriteTotalTimeoutMultiplier = 100;
 			m_WriteTotalTimeoutConstant = 0x3e8;
-			SerialPortExternels.timeBeginPeriod(1);
+			NativeMethods.timeBeginPeriod(1);
 		}
 		
 		public SerialPort(SerialCommPort port):this()
@@ -139,12 +139,12 @@ namespace XSerialPort
 		
 		public void ClearInputBuffer()
 		{
-			SerialPortExternels.PurgeComm(comDevice, 8);
+			NativeMethods.PurgeComm(comDevice, 8);
 		}
 		
 		public void ClearOutputBuffer()
 		{
-			SerialPortExternels.PurgeComm(comDevice, 4);
+			NativeMethods.PurgeComm(comDevice, 4);
 		}
 		
 		public bool GetCD()
@@ -204,7 +204,7 @@ namespace XSerialPort
 				return 0L;
 			}
 			ulong lpModemStat = 0L;
-			if (!SerialPortExternels.GetCommModemStatus(hComDevice, ref lpModemStat))
+			if (!NativeMethods.GetCommModemStatus(hComDevice, ref lpModemStat))
 			{
 				return 0L;
 			}
@@ -239,22 +239,22 @@ namespace XSerialPort
 		
 		public int SendUnicodeString(string text)
         {
-            return SendByteArray(SerialPortUtils.StringToUnicodeByteArray(text));
+            return SendByteArray(Strings.ToUnicodeByteArray(text));
         }
         
         public int SendASCIIString(string text)
         {
-            return SendByteArray(SerialPortUtils.StringToASCIIByteArray(text));
+            return SendByteArray(Strings.ToASCIIByteArray(text));
         }
         
         public int SendUTF7String(string text)
         {
-            return SendByteArray(SerialPortUtils.StringToUTF7ByteArray(text));
+            return SendByteArray(Strings.ToUTF7ByteArray(text));
         }
         
         public int SendUTF8String(string text)
         {
-            return SendByteArray(SerialPortUtils.StringToUTF8ByteArray(text));
+            return SendByteArray(Strings.ToUtf8ByteArray(text));
         }
 		
 		public int SendByteArray(byte[] btArray)
@@ -269,7 +269,7 @@ namespace XSerialPort
 				try
 				{
 					m_IsSending = true;
-					SerialPortExternels.WriteFile(comDevice, btArray, btArray.Length, ref lpNumberOfBytesWritten, 0);
+					NativeMethods.WriteFile(comDevice, btArray, btArray.Length, ref lpNumberOfBytesWritten, 0);
 					m_IsSending = false;
 					if (lpNumberOfBytesWritten > 0)
 					{
@@ -2259,7 +2259,7 @@ namespace XSerialPort
 		public void SetBreak(bool OnOff)
 		{
 			uint num = OnOff ? (uint)8 : (uint)9;
-			SerialPortExternels.EscapeCommFunction(comDevice, num);
+			NativeMethods.EscapeCommFunction(comDevice, num);
 		}
 		
 		private bool SetBuffers(IntPtr hComDevice, int inputBuffer, int outputBuffer)
@@ -2270,7 +2270,7 @@ namespace XSerialPort
 			}
 			try
 			{
-				return SerialPortExternels.SetupComm(hComDevice, inputBuffer, outputBuffer);
+				return NativeMethods.SetupComm(hComDevice, inputBuffer, outputBuffer);
 			}
 			catch
 			{
@@ -2287,7 +2287,7 @@ namespace XSerialPort
 			try
 			{
 				DCB lpDCB = new DCB();
-				SerialPortExternels.GetCommState(hComDevice, ref lpDCB);
+				NativeMethods.GetCommState(hComDevice, ref lpDCB);
 				if (m_BaudRate != SerialBaudRate.brCustom)
 				{
 					lpDCB.BaudRate = (int)m_BaudRate;
@@ -2326,7 +2326,7 @@ namespace XSerialPort
 				}
 				lpDCB.XonChar = '\x0011';
 				lpDCB.XoffChar = '\x0013';
-				return (SerialPortExternels.SetCommState(hComDevice, ref lpDCB) != 0);
+				return (NativeMethods.SetCommState(hComDevice, ref lpDCB) != 0);
 			}
 			catch
 			{
@@ -2345,7 +2345,7 @@ namespace XSerialPort
 			{
 				num = 6;
 			}
-			SerialPortExternels.EscapeCommFunction(comDevice, num);
+			NativeMethods.EscapeCommFunction(comDevice, num);
 		}
 
 		public void SetRTS(bool OnOff)
@@ -2359,7 +2359,7 @@ namespace XSerialPort
 			{
 				num = 4;
 			}
-			SerialPortExternels.EscapeCommFunction(comDevice, num);
+			NativeMethods.EscapeCommFunction(comDevice, num);
 		}
 		
 		private bool SetTimeouts(IntPtr hComDevice)
@@ -2371,7 +2371,7 @@ namespace XSerialPort
 			try
 			{
                 COMMTIMEOUTS lpCommTimeouts = new COMMTIMEOUTS { ReadIntervalTimeout = m_ReadIntervalTimeout, ReadTotalTimeoutMultiplier = m_ReadTotalTimeoutMultiplier, ReadTotalTimeoutConstant = m_ReadTotalTimeoutConstant, WriteTotalTimeoutMultiplier = m_WriteTotalTimeoutMultiplier, WriteTotalTimeoutConstant = m_WriteTotalTimeoutConstant };
-				if (SerialPortExternels.SetCommTimeouts(hComDevice, ref lpCommTimeouts) == 0)
+				if (NativeMethods.SetCommTimeouts(hComDevice, ref lpCommTimeouts) == 0)
 				{
 					return false;
 				}
@@ -2394,7 +2394,7 @@ namespace XSerialPort
 			{
 				num = 1;
 			}
-			SerialPortExternels.EscapeCommFunction(comDevice, num);
+			NativeMethods.EscapeCommFunction(comDevice, num);
 		}
 		
 		//Baud rate at which the communications device operates
@@ -2858,7 +2858,7 @@ namespace XSerialPort
 				
 				try
 				{
-					comDevice = SerialPortExternels.CreateFile(@"\\.\COM" + ((uint)m_Port), 0xc0000000, 0, 0, 3, 0, 0);
+					comDevice = NativeMethods.CreateFile(@"\\.\COM" + ((uint)m_Port), 0xc0000000, 0, 0, 3, 0, 0);
 					if (((int)comDevice) <= 0)
 						return false;
 					
@@ -2917,8 +2917,8 @@ namespace XSerialPort
 
 				if (comDevice.ToInt32() > 0)
 				{
-					SerialPortExternels.PurgeComm(comDevice, 15);
-					SerialPortExternels.CloseHandle(comDevice);
+					NativeMethods.PurgeComm(comDevice, 15);
+					NativeMethods.CloseHandle(comDevice);
 					comDevice = IntPtr.Zero;
 				}
 				m_ConnectedTo = SerialCommPort.None;
@@ -2958,13 +2958,13 @@ namespace XSerialPort
 							OnLineStatusChanged(new LineStatusEventArgs(lineStatus));
 					}
 					comstat = new COMSTAT();
-					SerialPortExternels.ClearCommError(comDevice, out num2, ref comstat);
+					NativeMethods.ClearCommError(comDevice, out num2, ref comstat);
 					int cbInQue = comstat.cbInQue;
 					if ((cbInQue > 0 && comDevice.ToInt32() > 0) && comThread.IsAlive)
 					{
 						byte[] buffer = new byte[cbInQue];
 						m_IsReceiving = true;
-						SerialPortExternels.ReadFile(comDevice, buffer, cbInQue, ref lpNumberOfBytesRead, 0);
+						NativeMethods.ReadFile(comDevice, buffer, cbInQue, ref lpNumberOfBytesRead, 0);
 						m_IsReceiving = false;
 						if (lpNumberOfBytesRead > 0)
 						{
@@ -2998,7 +2998,7 @@ namespace XSerialPort
             {
 			 	if (comDevice.ToInt32() > 0)
                 {
-                    SerialPortExternels.CloseHandle(comDevice);
+                    NativeMethods.CloseHandle(comDevice);
                     comDevice = IntPtr.Zero;
                 }
             }
@@ -3009,7 +3009,7 @@ namespace XSerialPort
             {
                 comThread.Abort();
             }
-            SerialPortExternels.timeEndPeriod(1);
+            NativeMethods.timeEndPeriod(1);
 		}
 		
 		 ~SerialPort()
