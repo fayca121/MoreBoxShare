@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using Microsoft.Win32;
 
@@ -17,11 +16,11 @@ namespace XSerialPort
 		private Thread comThread;
 		private ThreadPriority m_Priority;
 		
-		public event ConnectionEventHandler Disconnected;
-		public event ConnectionEventHandler Connected;
-		public event LineStatusEventHandler LineStatusChanged;
-		public event DataEventHandler Received;
-		public event DataEventHandler Sent;
+		public event EventHandler<ConnectionEventArgs> Disconnected;
+		public event EventHandler<ConnectionEventArgs> Connected;
+		public event EventHandler<LineStatusEventArgs> LineStatusChanged;
+		public event EventHandler<DataEventArgs> Received;
+		public event EventHandler<DataEventArgs> Sent;
 		
 		private IntPtr comDevice;
 		
@@ -2417,7 +2416,7 @@ namespace XSerialPort
 			}
 		}
 		
-		//Returns the physical port where the component is connected to."), Browsable(false)
+		//Returns the physical port where the component is connected to.
 		public SerialCommPort ConnectedTo
 		{
 			get
@@ -2517,7 +2516,7 @@ namespace XSerialPort
 			}
 		}
 
-		//Hardware flow control of the serial port.")]
+		//Hardware flow control of the serial port.
 		public SerialHardwareFlowControl HardwareFlowControl
 		{
 			get
@@ -2537,7 +2536,7 @@ namespace XSerialPort
 			}
 		}
 
-		//Recommended size of the device's internal input buffer, in bytes.")]
+		//Recommended size of the device's internal input buffer, in bytes
 		public int InputBuffer
 		{
 			get
@@ -2557,7 +2556,7 @@ namespace XSerialPort
 			}
 		}
 
-		//This property is false when the component is receiving data from the port, otherwise is false. Use this property to check if the component is inside a receiving process."), Browsable(false)]
+		//This property is false when the component is receiving data from the port, otherwise is false. Use this property to check if the component is inside a receiving process.
 		public bool IsReceiving
 		{
 			get
@@ -2566,7 +2565,7 @@ namespace XSerialPort
 			}
 		}
 
-		//This property is true when the component is sending data to the port, otherwise is false. Use this property to check if the component is inside a sending process.")]
+		//This property is true when the component is sending data to the port, otherwise is false. Use this property to check if the component is inside a sending process.
 		public bool IsSending
 		{
 			get
@@ -2575,7 +2574,7 @@ namespace XSerialPort
 			}
 		}
 
-		//Line status of the serial port.")]
+		//Line status of the serial port.
 		public ulong LineStatus
 		{
 			get
@@ -2586,7 +2585,7 @@ namespace XSerialPort
 
         public bool NeedSynchronization { get; set; }
 
-		//Recommended size of the device's internal output buffer, in bytes.")]
+		//Recommended size of the device's internal output buffer, in bytes.
 		public int OutputBuffer
 		{
 			get
@@ -2606,7 +2605,7 @@ namespace XSerialPort
 			}
 		}
 
-		//Parity scheme to be used.")]
+		//Parity scheme to be used.
 		public SerialParityBits ParityBits
 		{
 			get
@@ -2626,7 +2625,7 @@ namespace XSerialPort
 			}
 		}
 
-		//Physical name of the serial port.")]
+		//Physical name of the serial port.
 		public SerialCommPort Port
 		{
 			get
@@ -2642,7 +2641,7 @@ namespace XSerialPort
 			}
 		}
 
-		//Priority of the receiver thread.")]
+		//Priority of the receiver thread.
 		public ThreadPriority Priority
 		{
 			get
@@ -2662,7 +2661,12 @@ namespace XSerialPort
 			}
 		}
 
-		//Maximum time allowed to elapse between the arrival of two characters on the communications line, in milliseconds. During a ReadFile operation, the time period begins when the first character is received. If the interval between the arrival of any two characters exceeds this amount, the ReadFile operation is completed and any buffered data is returned. A value of zero indicates that interval time-outs are not used. A value of MAXDWORD, combined with zero values for both the ReadTotalTimeoutConstant and ReadTotalTimeoutMultiplier members, specifies that the read operation is to return immediately with the characters that have already been received, even if no characters have been received.")]
+		/*Maximum time allowed to elapse between the arrival of two characters on the communications line, in milliseconds. During a ReadFile operation, 
+        the time period begins when the first character is received. If the interval between the arrival of any two characters exceeds this amount,
+        the ReadFile operation is completed and any buffered data is returned. A value of zero indicates that interval time-outs are not used. A value of MAXDWORD, 
+        combined with zero values for both the ReadTotalTimeoutConstant and ReadTotalTimeoutMultiplier members, 
+        specifies that the read operation is to return immediately with the characters that have already been received, even if no characters have been received.*/
+
 		public int ReadIntervalTimeout
 		{
 			get
@@ -2682,7 +2686,7 @@ namespace XSerialPort
 			}
 		}
 
-		//Constant used to calculate the total time-out period for read operations, in milliseconds. For each read operation, this value is added to the product of the ReadTotalTimeoutMultiplier member and the requested number of bytes. A value of zero for both the ReadTotalTimeoutMultiplier and ReadTotalTimeoutConstant members indicates that total time-outs are not used for read operations.")]
+		//Constant used to calculate the total time-out period for read operations, in milliseconds. For each read operation, this value is added to the product of the ReadTotalTimeoutMultiplier member and the requested number of bytes. A value of zero for both the ReadTotalTimeoutMultiplier and ReadTotalTimeoutConstant members indicates that total time-outs are not used for read operations.
 		public int ReadTotalTimeoutConstant
 		{
 			get
@@ -2702,7 +2706,7 @@ namespace XSerialPort
 			}
 		}
 
-		//Multiplier used to calculate the total time-out period for read operations, in milliseconds. For each read operation, this value is multiplied by the requested number of bytes to be read.")]
+		//Multiplier used to calculate the total time-out period for read operations, in milliseconds. For each read operation, this value is multiplied by the requested number of bytes to be read.
 		public int ReadTotalTimeoutMultiplier
 		{
 			get
@@ -2722,7 +2726,7 @@ namespace XSerialPort
 			}
 		}
 
-		//Software flow control of the serial port.")]
+		//Software flow control of the serial port.
 		public SerialSoftwareFlowControl SoftwareFlowControl
 		{
 			get
@@ -2742,7 +2746,7 @@ namespace XSerialPort
 			}
 		}
 
-		//Number of stop bits to be used.")]
+		//Number of stop bits to be used.
 		public SerialStopBits StopBits
 		{
 			get
@@ -2770,7 +2774,7 @@ namespace XSerialPort
 			}
 		}
 
-		//Constant used to calculate the total time-out period for write operations, in milliseconds. For each write operation, this value is added to the product of the WriteTotalTimeoutMultiplier member and the number of bytes to be written. A value of zero for both the WriteTotalTimeoutMultiplier and WriteTotalTimeoutConstant members indicates that total time-outs are not used for write operations.")]
+		//Constant used to calculate the total time-out period for write operations, in milliseconds. For each write operation, this value is added to the product of the WriteTotalTimeoutMultiplier member and the number of bytes to be written. A value of zero for both the WriteTotalTimeoutMultiplier and WriteTotalTimeoutConstant members indicates that total time-outs are not used for write operations.
 		public int WriteTotalTimeoutConstant
 		{
 			get
@@ -2790,7 +2794,7 @@ namespace XSerialPort
 			}
 		}
 
-		//Multiplier used to calculate the total time-out period for write operations, in milliseconds. For each write operation, this value is multiplied by the number of bytes to be written.")]
+		//Multiplier used to calculate the total time-out period for write operations, in milliseconds. For each write operation, this value is multiplied by the number of bytes to be written.
 		public int WriteTotalTimeoutMultiplier
 		{
 			get

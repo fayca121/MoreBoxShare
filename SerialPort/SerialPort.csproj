@@ -9,6 +9,7 @@
     <AssemblyName>SerialPort</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -40,15 +41,12 @@
     <Compile Include="Enums\SerialHardwareFlowControl.cs" />
     <Compile Include="Enums\SerialParityBits.cs" />
     <Compile Include="Enums\SerialSoftwareFlowControl.cs" />
+    <Compile Include="Events\ConnectionEventArgs.cs" />
     <Compile Include="Structs\DCB.cs" />
     <Compile Include="Structs\COMSTAT.cs" />
     <Compile Include="Structs\COMMTIMEOUTS.cs" />
-    <Compile Include="Events\ConnectionEventArgs.cs" />
-    <Compile Include="Events\ConnectionEventHandler.cs" />
     <Compile Include="Events\DataEventArgs.cs" />
-    <Compile Include="Events\DataEventHandler.cs" />
     <Compile Include="Events\LineStatusEventArgs.cs" />
-    <Compile Include="Events\LineStatusEventHandler.cs" />
     <Compile Include="Enums\SerialStopBits.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="SerialPort.cs" />
